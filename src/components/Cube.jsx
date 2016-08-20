@@ -1,0 +1,55 @@
+import React from 'react';
+import { connect } from 'react-redux';
+import {cubeCount} from './constants';
+import styles from './Bench.scss';
+
+export const Cube = ({ith, iteration, start}) => {
+
+  const fromIth = (i) => {
+    const completeRatio = i ? ((i * 1.0) / cubeCount) : 0;
+    const rawMag = 255 * completeRatio;
+    const magnitude = Math.round(rawMag);
+    return magnitude;
+  }
+
+
+
+  const r = fromIth(ith);
+  const g = fromIth(ith);
+  const b = fromIth(ith);
+
+  const vals = [r,g,b];
+  const valString = vals.join(',');
+  const rgb = 'rgb('+ valString +')'
+
+  const style = {
+    backgroundColor: rgb,
+  }
+
+  var iterationMod = iteration % cubeCount;
+
+  if(ith > iterationMod){
+    style.backgroundColor = 'transparent';
+  }
+
+  return <div className={['panel', 'ith-' + ith, styles.cube].join(' ') } style={style}/>
+}
+
+const mapStateToProps = ({iteration = 0, start = ''}) => {
+
+  return {
+    iteration,
+    start,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => ({
+  next: () => dispatch({type: 'NEXT'}),
+});
+
+export const ConnectedCube = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Cube);
+
+export default ConnectedCube;

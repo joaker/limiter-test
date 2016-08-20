@@ -1,0 +1,47 @@
+.container {
+  background-color: gray;
+  display:flex;
+  flex-flow: row wrap;
+}
+
+$side : 0.25em;
+$side : 0.5em;
+
+.cube {
+  height: $side;
+  width: $side;
+  margin: $side/2;
+}
+
+.controls{
+  display:flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+}
+
+.rateName{
+  display:inline-block;
+}
+
+.throttle{
+  display:inline-block;
+
+  label {
+    margin-right: .25em;
+  }
+}
+
+.rateList{
+  display:inline-block;
+  font-size:80%;
+  a{
+    color: #777;
+    text-decoration: none;
+    display:inline-block;
+    margin:.5em;
+
+    &:hover{
+      color:#333;
+    }
+  }
+}
