@@ -8,6 +8,7 @@ import {Router, Route, IndexRoute, hashHistory} from 'react-router';
 import {createStore,  applyMiddleware} from 'redux';
 import {Provider} from 'react-redux';
 
+import colorize from './util/colors';
 import reducer, {defaultState} from './app/reducer';
 import Bench from './components/Bench';
 
@@ -59,20 +60,33 @@ const baseStore = createStore(reducer, defaultState);
 const wrapper = true;
 
 
+const getRate = () =>{
+  const search = window.location.search || '?0';
+  const rating = window.location.search.substring(1);
+  const rate = parseInt(rating) || 0;
+  return rate;
+}
+
+const aStore = createStore(reducer, defaultState);
+const theStore = (!!getRate()) ? limitStore(aStore, getRate()) : aStore;
+
+
+const getColor = () => {
+  const state = theStore.getState();
+  const {iteration} = state;
+  const color = colorize(iteration);
+  return color;
+}
+
+
 class Wrapper extends React.Component {
 
-  getRate(){
-    const search = window.location.search || '?0';
-    const rating = window.location.search.substring(1);
-    const rate = parseInt(rating) || 0;
-    return rate;
-  }
 
   constructor(props) {
     super(props);
 
     this.state = {
-       rate: this.getRate(),
+       rate: getRate(),
        hsl: {
          hue: 120,
          saturation: '100%',
@@ -81,7 +95,10 @@ class Wrapper extends React.Component {
        },
      };
      this.setRate = this.setRate.bind(this);
-     this.getRate = this.getRate.bind(this);
+  }
+
+  getChildContext() {
+    return {getColor,};
   }
 
   setRate(newRate){
@@ -93,16 +110,19 @@ class Wrapper extends React.Component {
   }
 
   render(){
-    const aStore = createStore(reducer, defaultState);
-    const wrappedStore = (!!this.state.rate) ? limitStore(aStore, this.state.rate) : aStore;
 
     return (
-      <Provider store={wrappedStore}>
+      <Provider store={theStore}>
         <Bench {...this.state} setRate={this.setRate}/>
       </Provider>
     );
   }
 }
+
+Wrapper.childContextTypes = {
+  getColor: React.PropTypes.func
+};
+
 
 ReactDOM.render(
   <div className={styles.appWrap}>

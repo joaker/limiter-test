@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import {cubeCount} from './constants';
 import styles from './Bench.scss';
 
-export const Cube = ({ith, iteration, start}) => {
+export const Cube = ({ith, active}, {getColor}) => {
 
   const fromIth = (i) => {
     const completeRatio = i ? ((i * 1.0) / cubeCount) : 0;
@@ -22,30 +22,38 @@ export const Cube = ({ith, iteration, start}) => {
   const valString = vals.join(',');
   const rgb = 'rgb('+ valString +')'
 
+  const backgroundColor = getColor() || rgb;
+
   const style = {
-    backgroundColor: rgb,
+    backgroundColor,
   }
 
-  var iterationMod = iteration % cubeCount;
+  // var iterationMod = iteration % cubeCount;
 
-  if(ith > iterationMod){
+  if(!active){
     style.backgroundColor = 'transparent';
   }
 
   return <div className={['panel', 'ith-' + ith, styles.cube].join(' ') } style={style}/>
 }
 
-const mapStateToProps = ({iteration = 0, start = ''}) => {
+Cube.contextTypes = {getColor: React.PropTypes.func};
 
+const mapStateToProps = ({iteration = 0, start = ''}, {ith}) => {
+  const cursor = iteration % cubeCount;
+  const active = cursor >= ith;
   return {
-    iteration,
-    start,
+    active,
+    // iteration,
   };
 };
+const createMapStateToProps = (memoize) => mapStateToProps;
 
 const mapDispatchToProps = (dispatch) => ({
   next: () => dispatch({type: 'NEXT'}),
 });
+
+const createMapDispatchToProps = (memoize) => mapDispatchToProps;
 
 export const ConnectedCube = connect(
   mapStateToProps,
