@@ -39,11 +39,16 @@ export const Cube = ({ith, active}, {getColor}) => {
 
 Cube.contextTypes = {getColor: React.PropTypes.func};
 
-const mapStateToProps = ({iteration = 0, start = ''}, {ith}) => {
-  const cursor = iteration % cubeCount;
+const mapStateToProps = ({iteration: iterationNumber = 0, start = '', memoizing}, {ith}) => {
+  const cursor = iterationNumber % cubeCount;
   const active = cursor >= ith;
+
+  const iteration = !memoizing && iterationNumber;
+
   return {
     active,
+    iteration,
+
     // iteration,
   };
 };

@@ -6,6 +6,7 @@ export const defaultState = {
   iteration: 1,
   start: moment(),
   lastStart: 1,
+  memoizing: 'memoizing',
 };
 
 export const reducerFactory = (initialState = defaultState) => (state = initialState, action) => {
@@ -19,6 +20,8 @@ export const reducerFactory = (initialState = defaultState) => (state = initialS
       const start = moment();
       nextState = Object.assign({}, state, { start, lastStart: state.iteration })
       return nextState;
+    case 'SET':
+      return nextState = Object.assign({}, state, action.payload)
     default:
       break;
   }

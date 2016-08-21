@@ -80,17 +80,26 @@ class Bench extends React.Component {
 
 
   render(){
-    const isRunning = !interval;
     const act = !interval ? (
       <button onClick={this.start}>Start</button>
     ) : (
       <button onClick={this.stop}>Stop</button>
     );
 
+    const {memoizing, setMemoization} = this.props;
+    const nextMemoizationState = !memoizing;
+    // debugger;
+
+    const memoMessage = !memoizing ? "Enable Memoization" : "Disable Memoization";
+    const memoButton = (<button onClick={() => {
+      setMemoization(nextMemoizationState);
+      // debugger;
+    }}>{memoMessage}</button>);
+
     return (
     <div className="bench" >
       <Header rate={this.props.rate}/>
-      {act}
+      {act}{memoButton}
       <div className={"color-wrapper"} >
           <BenchCubes/>
       </div>
@@ -99,9 +108,10 @@ class Bench extends React.Component {
 };
 
 
-const mapStateToProps = ({iteration = 0, start = '', loops = loopCount}) => {
+const mapStateToProps = ({iteration = 0, start = '', loops = loopCount, memoizing = false}) => {
   return {
     iteration,
+    memoizing,
     // start,
     // loops,
   };
@@ -110,6 +120,10 @@ const mapStateToProps = ({iteration = 0, start = '', loops = loopCount}) => {
 const mapDispatchToProps = (dispatch) => ({
   next: () => dispatch({type: 'NEXT'}),
   startTimer: () => dispatch({type: 'START'}),
+  setMemoization: (val) => {
+    dispatch({type: 'SET', payload: {memoizing: val}})
+    // debugger;
+  },
 });
 
 export const ConnectedBench = connect(
