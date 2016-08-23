@@ -1,3 +1,5 @@
+// source: https://gist.github.com/gaearon/ffd88b0e4f00b22c3159
+
 const mapValues = (obj, fn) => Object.keys(obj).reduce((result, key) => {
     result[key] = fn(obj[key], key);
     return result;
