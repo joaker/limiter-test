@@ -14,6 +14,7 @@ export const Cube = ({ith, active}, {getColor}) => {
 
 
 
+  /* a few nonsense operations to increase render cost */
   const r = fromIth(ith);
   const g = fromIth(ith);
   const b = fromIth(ith);
@@ -22,13 +23,12 @@ export const Cube = ({ith, active}, {getColor}) => {
   const valString = vals.join(',');
   const rgb = 'rgb('+ valString +')'
 
+  // Aaaaand, we're back
   const backgroundColor = getColor() || rgb;
 
   const style = {
     backgroundColor,
   }
-
-  // var iterationMod = iteration % cubeCount;
 
   if(!active){
     style.backgroundColor = 'transparent';
@@ -52,7 +52,6 @@ const mapStateToProps = ({iteration: iterationNumber = 0, start = '', memoizing}
     // iteration,
   };
 };
-const createMapStateToProps = (memoize) => mapStateToProps;
 
 const mapDispatchToProps = (dispatch) => ({
   next: () => dispatch({type: 'NEXT'}),
