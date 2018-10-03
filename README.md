@@ -10,7 +10,8 @@ It's better to show than to tell
 ```
 $ git clone https://github.com/joaker/redux-limiter.git
 $ cd redux-limiter
-$ webpack-dev-server
+$ npm i
+$ npm start
 ```
 
 Navigate to:
